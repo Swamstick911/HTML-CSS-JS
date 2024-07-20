@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script type="module" src="./script.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <style>
+    body {
+      background-image: url('./McLaren P1.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      margin: 0px;
+      font-family: Andale Mono, monospace;
+      overflow: hidden;
+    }
+
+    #welcome {
+      background-color: #FFFFFF;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 8px;
+      border: 0.4rem solid #7EB168;
+      width: 512px;
+      border-radius: 16px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    #github {
+      margin-top: -20px;
+    }
+
+    .header {
+      padding: 4px;
+      margin: 4px;
+      background-color: #B6C9F6;
+      color: #000;
+      cursor: move;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      color: white;
+      backdrop-filter: blur(3px);
+      background-color: rgba(255, 222, 89, 0.3);
+    }
+
+    .footer p {
+      font-weight: 800;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 32px;
+      padding: 6px 16px;
+      margin: 16px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="window" id="welcome" style="top: calc(50% - 90px); left: calc(50% - 180px);">
+    <div class="windowheader" id="welcomeheader">
+      <div class="closebutton" id="welcomeclose" style=""></div>
+    </div>
+    <h2 class="header">Welcome to Cars OS!</h2>
+    <img style="width: 128px; height: 128px; border-radius: 64px; object-fit: cover" src="./Supercars.jpg" />
+    <p>Hello there, this OS is made by Swastik Bajpai.</p>
+    <p id="github">Check out my github!</p>
+    <a href="https://www.github.com/Swamstick911/"><strong>My Github</strong></a>
+  </div>
+
+  <div class="footer">
+    <p>Cars OS</p>
+    <p>🚗 A Car Lover ❤</p>
+    <p id="timeElement">Time</p>
+    <p style="cursor: pointer" id="welcomeopen">Welcome Screen</p>
+  </div>
+
+  <div id="desktopApps" style="padding-top: 16px; padding-left: 16px">
+    <div class="selected"
+      style="text-align: center; padding: 16px; filter: drop-shadow(0 0 16px black); width: fit-content">
+      <img src="./vector-notes-icon.jpg" style="width: 82px; height: 82px; border-radius: 16px;">
+      <p style="margin: 0px; color: #FFFFFF;">Notes</p>
+    </div>
+  </div>
+
+  <div class="window" id="notes" style="top: calc(50% - 90px); left: calc(50% - 180px); display: none;">
+    <div class="windowheader" id="notesheader">
+      <div class="closebutton" id="notesclose" style=""></div>
+    </div>
+    <h1 class="header">Notes</h1>
+    <div style="width: 32px; margin-right: 5px; height: 32px; border-radius: 16px"></div>
+  </div>
+
+  <script>
+    var selectedIcon = undefined;
+    function selectIcon(element) {
+      element.classList.add("selected");
+      selectedIcon = element;
+    }
+    function deselectIcon(element) {
+      element.classList.remove("selected");
+      selectedIcon = undefined;
+    }
+    function handleIconTap(element) {
+      if (element.classList.contains("selected")) {
+        deselectIcon(element);
+      } else {
+        selectIcon(element);
+      }
+    }
+
+    // Function to update time every second
+    function updateTime() {
+      var timeIsMoney = new Date().toLocaleString();
+      var timeText = document.querySelector('#timeElement');
+      timeText.innerHTML = timeIsMoney;
+    }
+    setInterval(updateTime, 1000);
+
+    // Function to make a window draggable
+    function makeDraggable(draggable) {
+      const header = draggable.querySelector('.windowheader');
+
+      header.addEventListener('mousedown', function (event) {
+        event.preventDefault();
+
+        let shiftX = event.clientX - draggable.getBoundingClientRect().left;
+        let shiftY = event.clientY - draggable.getBoundingClientRect().top;
+
+        function moveAt(pageX, pageY) {
+          draggable.style.left = pageX - shiftX + 'px';
+          draggable.style.top = pageY - shiftY + 'px';
+        }
+
+        function onMouseMove(event) {
+          moveAt(event.pageX, event.pageY);
+        }
+
+        document.addEventListener('mousemove', onMouseMove);
+
+        document.addEventListener('mouseup', function onMouseUp() {
+          document.removeEventListener('mousemove', onMouseMove);
+          document.removeEventListener('mouseup', onMouseUp);
+        }, {once: true});
+      });
+
+      draggable.ondragstart = function () {
+        return false;
+      };
+    }
+
+    makeDraggable(document.getElementById('welcome'));
+    makeDraggable(document.getElementById('notes'));
+
+    // Functions to open and close windows
+    function closeWindow(element) {
+      element.style.display = "none";
+    }
+    function openWindow(element) {
+      element.style.display = "flex";
+    }
+
+    document.querySelector("#welcomeclose").addEventListener("click", function () {
+      closeWindow(document.getElementById('welcome'));
+    });
+    document.querySelector("#welcomeopen").addEventListener("click", function () {
+      openWindow(document.getElementById('welcome'));
+    });
+    document.querySelector("#notesclose").addEventListener("click", function () {
+      closeWindow(document.getElementById('notes'));
+    });
+    document.querySelector("#notesheader").addEventListener("click", function () {
+      openWindow(document.getElementById('notes'));
+    });
+  </script>
+</body>
+
+</html>
