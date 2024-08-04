@@ -14,6 +14,7 @@ const sky = "s"
 const clouds = "c"
 const obstacle = "o"
 const lava = "l"
+const arrow = "a"
 
 let currentPlayer;
 let currentJumps = 0;
@@ -22,22 +23,22 @@ let maxJumps = 2;
 
 setLegend(
   [ player, bitmap`
-0000000000000000
-0666666666666660
-0666666666666660
-0666000660006660
-0666070660706660
-0666000660006660
-0666666666666660
-0666666666666660
-0600000000000060
-0607777777777060
-0600000000000060
-0666666666666660
-0666666666666660
-0666666666666660
-0666666666666660
-0000000000000000`],
+................
+................
+................
+................
+..000000000000..
+..0D44444444D0..
+..044444444440..
+..0440D4440D40..
+..040204402040..
+..040204402040..
+..040204402040..
+..0440D4440D40..
+..044444444440..
+..0444400D4440..
+..0D44444444D0..
+..000000000000..`],
   [ block, bitmap `
 0000000000000000
 0909990999099990
@@ -122,32 +123,49 @@ setLegend(
 9999999993666999
 9999999999999999
 9993999933999999
-9993999999999999`]
+9993999999999999`],
+  [ arrow, bitmap`
+................
+...........0....
+...........00...
+...........0H0..
+...........0880.
+0000000000008880
+0HHHHHHHHHHH8880
+0888888888888880
+0888888888888880
+0000000000008880
+...........08880
+...........08H0.
+...........0H0..
+...........00...
+...........0....
+................`]
 )
 
-setSolids([])
+setSolids([block], [obstacle])
 setBackground(sky)
 
 let level = 0
 const levels = [
   map`
-sssssssscss
-scssscsssss
-sscssssscss
-ssssssssssc
-ssssscsssss
-sssssssssss
-spssossosss
+........c..
+.c...c.....
+..c.....c..
+..........c
+.....c.....
+...........
+.p..o..o..a
 bbbbbbbbbbb
 bbbbbbbbbbb`,
   map`
-sscsssssssc
-ssssssscsss
-cssssssssss
-sscsssssssc
-ssbbbssbbss
-sssssssssss
-ssssossssos
+..c.......c
+.......c...
+c..........
+..c.......c
+..bbb..bb..
+...........
+....o....oa
 bbbbbbbbbbb
 bbbbbbbbbbb`,
   map`
@@ -164,15 +182,12 @@ bbbllllllll`
 
 setMap(levels[level])
 
-setPushables({
-  [ player ]: []
-})
 
 function jump() {
   getFirst(player).y -= 2
   setTimeout(() => {
     console.log(getFirst(player).y += 2);
-  }, 100);
+  }, 200);
 }
 onInput("w", () => {
   jump()
